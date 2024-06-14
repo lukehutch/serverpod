@@ -17,19 +17,20 @@ class FlutterConnectivityMonitor extends ConnectivityMonitor {
 
     // Start listening to connection status changes.
     _connectivitySubscription =
-        Connectivity().onConnectivityChanged.listen((connectivityResultList) {
-      var connected = connectivityResultList.any((connectivityResult) =>
-          connectivityResult != ConnectivityResult.none);
+        Connectivity().onConnectivityChanged.listen((event) {
+      final bool hasConnectivity =
+          !(event.length == 1 && event.first == ConnectivityResult.none);
+
       if (!_receivedFirstEvent) {
         // Skip the first event if it happens immediately on launch as it may
         // not be correct on some platforms.
         _receivedFirstEvent = true;
         var durationSinceStart = DateTime.now().difference(connectionTime);
-        if (!connected && durationSinceStart < warmupDuration) {
+        if (!hasConnectivity && durationSinceStart < warmupDuration) {
           return;
         }
       }
-      notifyListeners(connected);
+      notifyListeners(hasConnectivity);
     });
   }
 
