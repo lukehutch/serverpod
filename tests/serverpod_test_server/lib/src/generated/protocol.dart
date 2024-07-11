@@ -824,6 +824,7 @@ class Protocol extends _i1.SerializationManagerServer {
           ],
           type: 'btree',
           isUnique: true,
+          isNotNull: false,
           isPrimary: true,
         )
       ],
@@ -877,6 +878,7 @@ class Protocol extends _i1.SerializationManagerServer {
           ],
           type: 'btree',
           isUnique: true,
+          isNotNull: false,
           isPrimary: true,
         )
       ],
@@ -927,6 +929,7 @@ class Protocol extends _i1.SerializationManagerServer {
           ],
           type: 'btree',
           isUnique: true,
+          isNotNull: false,
           isPrimary: true,
         )
       ],
@@ -974,6 +977,7 @@ class Protocol extends _i1.SerializationManagerServer {
           ],
           type: 'btree',
           isUnique: true,
+          isNotNull: false,
           isPrimary: true,
         )
       ],
