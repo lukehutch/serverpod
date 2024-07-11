@@ -896,6 +896,9 @@ extension on DatabaseDefinition {
                 'isUnique': literalBool(index.isUnique),
                 'isNotNull': literalBool(index.isNotNull ?? false),
                 'isPrimary': literalBool(index.isPrimary),
+                'predicate': index.predicate != null
+                    ? literalString(index.predicate!)
+                    : literalNull,
               }),
           ]),
           'managed': literalBool(table.isManaged),
