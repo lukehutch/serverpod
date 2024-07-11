@@ -180,7 +180,6 @@ extension IndexComparisons on IndexDefinition {
     IndexDefinition other, {
     bool ignoreCase = false,
   }) {
-    print('hi');
     if (ignoreCase) {
       if (other.indexName.toLowerCase() != indexName.toLowerCase()) {
         return false;
@@ -191,25 +190,12 @@ extension IndexComparisons on IndexDefinition {
       }
     }
 
-    var isLike = other.isPrimary == isPrimary &&
+    return other.isPrimary == isPrimary &&
         other.isUnique == isUnique &&
         (other.isNotNull ?? false) == (isNotNull ?? false) &&
         (other.predicate ?? '') == (predicate ?? '') &&
         other.tableSpace == tableSpace &&
         other.type == type;
-    if (!isLike) {
-      if (!isLike) {
-        print('Index structure comparison:');
-        print('  Index Name: ${other.indexName} vs ${indexName}');
-        print('  Is Primary: ${other.isPrimary} vs ${isPrimary}');
-        print('  Is Unique: ${other.isUnique} vs ${isUnique}');
-        print('  Is Not Null: ${other.isNotNull} vs ${isNotNull}');
-        print('  Predicate: ${other.predicate} vs ${predicate}');
-        print('  Table Space: ${other.tableSpace} vs ${tableSpace}');
-        print('  Type: ${other.type} vs ${type}');
-      }
-    }
-    return isLike;
   }
 }
 
