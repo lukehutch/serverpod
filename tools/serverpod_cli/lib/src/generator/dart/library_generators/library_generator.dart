@@ -894,7 +894,7 @@ extension on DatabaseDefinition {
                 ]),
                 'type': literalString(index.type),
                 'isUnique': literalBool(index.isUnique),
-                'isNotNull': literalBool(index.isNotNull),
+                'isNotNull': literalBool(index.isNotNull ?? false),
                 'isPrimary': literalBool(index.isPrimary),
               }),
           ]),
