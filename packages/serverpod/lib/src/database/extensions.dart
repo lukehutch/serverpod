@@ -104,6 +104,7 @@ extension TableComparisons on TableDefinition {
   /// Returns true if the table structure is identical to the [other]. Ignores
   /// comparisons of Dart types and names.
   bool like(TableDefinition other) {
+    print(StackTrace.current);
     // Columns
     if (other.columns.length != columns.length) {
       return false;
