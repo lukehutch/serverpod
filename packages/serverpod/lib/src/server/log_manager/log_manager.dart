@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:serverpod/database.dart';
 import 'package:serverpod/src/server/log_manager/log_settings.dart';
@@ -130,11 +131,11 @@ class LogManager {
       order: session.sessionLogs.createLogOrderId,
     );
 
-    if (session.serverpod.runMode == ServerpodRunMode.development) {
-      stdout.writeln('${entry.logLevel.name.toUpperCase()}: ${entry.message}');
-      if (entry.error != null) stdout.writeln(entry.error);
-      if (entry.stackTrace != null) stdout.writeln(entry.stackTrace);
-    }
+    //if (session.serverpod.runMode == ServerpodRunMode.development) {
+    stdout.writeln('${entry.logLevel.name.toUpperCase()}: ${entry.message}');
+    if (entry.error != null) stdout.writeln(entry.error);
+    if (entry.stackTrace != null) stdout.writeln(entry.stackTrace);
+    //}
 
     if (!_shouldLogEntry(session: session, entry: entry)) {
       return;
