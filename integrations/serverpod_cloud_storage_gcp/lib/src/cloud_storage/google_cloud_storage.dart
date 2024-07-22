@@ -101,7 +101,10 @@ class GoogleCloudStorage extends CloudStorage {
     required Session session,
     required String path,
   }) async {
-    await _s3Client.deleteObject(path);
+    var response = await _s3Client.deleteObject(path);
+    if (response.statusCode != 200) {
+      throw 'File does not exist: $path -- status code ${response.statusCode}';
+    }
   }
 
   @override
