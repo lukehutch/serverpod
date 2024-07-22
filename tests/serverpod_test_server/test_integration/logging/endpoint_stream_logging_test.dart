@@ -22,6 +22,7 @@ void main() async {
 
     tearDown(() async {
       await client.closeStreamingConnection();
+      client.close();
       await await session.close();
       await server.shutdown(exitProcess: false);
     });
@@ -92,8 +93,88 @@ void main() async {
 
       var logs = await LoggingUtil.findAllLogs(session);
 
+      // Wait for the log to be written
+      await Future.delayed(Duration(milliseconds: 100));
+
       expect(logs, hasLength(1));
       expect(logs.first.messages, hasLength(1));
+    });
+
+    test(
+        'Given that all logging is turned down when sending a stream message and then closing the connection no logs are written.',
+        () async {
+      var settings = RuntimeSettingsBuilder()
+          .withLogSettings(LogSettingsBuilder().withLoggingTurnedDown().build())
+          .build();
+
+      await server.updateRuntimeSettings(settings);
+      await client.openStreamingConnection(
+        disconnectOnLostInternetConnection: false,
+      );
+
+      await client.logging.sendStreamMessage(Types());
+      await client.closeStreamingConnection();
+
+      // Wait for the log to potentially be written
+      await Future.delayed(Duration(milliseconds: 100));
+
+      var logs = await LoggingUtil.findAllLogs(session);
+
+      expect(logs, isEmpty);
+    });
+
+    test(
+        'Given that all logging is turned down when but an override for the endpoint when sending a stream message to that endpoint and then closing the connection the logs are written.',
+        () async {
+      var settings = RuntimeSettingsBuilder()
+          .withLogSettings(LogSettingsBuilder().withLoggingTurnedDown().build())
+          .withLogSettingsOverride(
+            endpoint: 'logging',
+            logSettings: LogSettingsBuilder().build(),
+          )
+          .build();
+
+      await server.updateRuntimeSettings(settings);
+      await client.openStreamingConnection(
+        disconnectOnLostInternetConnection: false,
+      );
+
+      await client.logging.sendStreamMessage(Types());
+      await client.closeStreamingConnection();
+
+      // Wait for the log to be written
+      await Future.delayed(Duration(milliseconds: 100));
+
+      var logs = await LoggingUtil.findAllLogs(session);
+
+      expect(logs, hasLength(1));
+    });
+
+    test(
+        'Given that all logging is turned down when but an override for the endpoint when sending a stream message to another endpoint and then closing the connection no logs are written.',
+        () async {
+      var settings = RuntimeSettingsBuilder()
+          .withLogSettings(LogSettingsBuilder().withLoggingTurnedDown().build())
+          .withLogSettingsOverride(
+            endpoint: 'authentication',
+            logSettings: LogSettingsBuilder().build(),
+          )
+          .build();
+
+      await server.updateRuntimeSettings(settings);
+      await client.openStreamingConnection(
+        disconnectOnLostInternetConnection: false,
+      );
+
+      await client.logging.sendStreamMessage(Types());
+      await client.closeStreamingConnection();
+
+      // Wait for the log to be written
+      await Future.delayed(Duration(milliseconds: 100));
+
+      var logs = await LoggingUtil.findAllLogs(session);
+
+      expect(logs, isEmpty);
     });
   });
 }

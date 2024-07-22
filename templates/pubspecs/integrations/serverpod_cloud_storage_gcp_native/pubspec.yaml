@@ -1,0 +1,29 @@
+# TEMPLATE
+
+name: serverpod_cloud_storage_gcp_native
+description: Serverpod integration for Google Cloud Storage, using the native GCP API
+version: SERVERPOD_VERSION
+repository: https://github.com/serverpod/serverpod
+homepage: https://serverpod.dev
+issue_tracker: https://github.com/serverpod/serverpod/issues
+
+environment:
+  sdk: DART_VERSION
+
+
+dependencies:
+  serverpod: SERVERPOD_VERSION
+  gcloud: ^0.8.12
+  googleapis_auth: ^1.6.0
+  googleapis: ^13.2.0
+
+dev_dependencies:
+  lints: '>=3.0.0 <5.0.0'
+
+dependency_overrides:
+  serverpod:
+    path: ../../packages/serverpod
+  serverpod_serialization:
+    path: ../../packages/serverpod_serialization
+  serverpod_shared:
+    path: ../../packages/serverpod_shared

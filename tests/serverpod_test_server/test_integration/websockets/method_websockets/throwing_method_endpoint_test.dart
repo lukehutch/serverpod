@@ -26,22 +26,26 @@ void main() {
     });
 
     group(
-        'when a stream is opened to an endpoint with a Future return that throws an exception then',
+        'when a stream is opened to an endpoint with a Future return that throws an exception',
         () {
       var streamOpened = Completer<void>();
       late Completer<CloseMethodStreamCommand> closeMethodStreamCommand;
 
       var endpoint = 'methodStreaming';
-      var method = 'throwsException';
+      var method = 'inStreamThrowsException';
       var connectionId = const Uuid().v4obj();
 
       setUp(() async {
         closeMethodStreamCommand = Completer<CloseMethodStreamCommand>();
         webSocket.stream.listen((event) {
-          var message = WebSocketMessage.fromJsonString(event);
+          var message = WebSocketMessage.fromJsonString(
+            event,
+            server.serializationManager,
+          );
           if (message is OpenMethodStreamResponse) {
             streamOpened.complete();
-          } else if (message is CloseMethodStreamCommand) {
+          } else if (message is CloseMethodStreamCommand &&
+              message.parameter == null) {
             closeMethodStreamCommand.complete(message);
           }
         });
@@ -61,7 +65,8 @@ void main() {
         );
       });
 
-      test('then CloseMethodStreamCommand matching endpoint is received.',
+      test(
+          'then CloseMethodStreamCommand matching endpoint is received with error reason.',
           () async {
         var message =
             closeMethodStreamCommand.future.timeout(Duration(seconds: 5));
@@ -86,13 +91,16 @@ void main() {
       late Completer<CloseMethodStreamCommand> closeMethodStreamCommand;
 
       var endpoint = 'methodStreaming';
-      var method = 'throwsExceptionStream';
+      var method = 'outStreamThrowsException';
       var connectionId = const Uuid().v4obj();
 
       setUp(() async {
         closeMethodStreamCommand = Completer<CloseMethodStreamCommand>();
         webSocket.stream.listen((event) {
-          var message = WebSocketMessage.fromJsonString(event);
+          var message = WebSocketMessage.fromJsonString(
+            event,
+            server.serializationManager,
+          );
           if (message is OpenMethodStreamResponse) {
             streamOpened.complete();
           } else if (message is CloseMethodStreamCommand) {
@@ -115,7 +123,8 @@ void main() {
         );
       });
 
-      test('then CloseMethodStreamCommand matching endpoint is received.',
+      test(
+          'then CloseMethodStreamCommand matching endpoint with error reason is received.',
           () async {
         var message =
             closeMethodStreamCommand.future.timeout(Duration(seconds: 5));
@@ -141,7 +150,7 @@ void main() {
       late Completer<CloseMethodStreamCommand> closeMethodStreamCommand;
 
       var endpoint = 'methodStreaming';
-      var method = 'throwsSerializableException';
+      var method = 'inStreamThrowsSerializableException';
       var connectionId = const Uuid().v4obj();
 
       setUp(() async {
@@ -151,12 +160,16 @@ void main() {
         closeMethodStreamCommand = Completer<CloseMethodStreamCommand>();
 
         webSocket.stream.listen((event) {
-          var message = WebSocketMessage.fromJsonString(event);
+          var message = WebSocketMessage.fromJsonString(
+            event,
+            server.serializationManager,
+          );
           if (message is OpenMethodStreamResponse) {
             streamOpened.complete();
           } else if (message is MethodStreamSerializableException) {
             methodStreamSerializableException.complete(message);
-          } else if (message is CloseMethodStreamCommand) {
+          } else if (message is CloseMethodStreamCommand &&
+              message.parameter == null) {
             closeMethodStreamCommand.complete(message);
           }
         });
@@ -195,7 +208,8 @@ void main() {
             connectionId);
       });
 
-      test('then CloseMethodStreamCommand matching the endpoint is received.',
+      test(
+          'then CloseMethodStreamCommand matching the endpoint with error reason is received.',
           () async {
         var message =
             closeMethodStreamCommand.future.timeout(Duration(seconds: 5));
@@ -221,7 +235,7 @@ void main() {
       late Completer<CloseMethodStreamCommand> closeMethodStreamCommand;
 
       var endpoint = 'methodStreaming';
-      var method = 'throwsSerializableExceptionStream';
+      var method = 'outStreamThrowsSerializableException';
       var connectionId = const Uuid().v4obj();
 
       setUp(() async {
@@ -231,7 +245,10 @@ void main() {
         closeMethodStreamCommand = Completer<CloseMethodStreamCommand>();
 
         webSocket.stream.listen((event) {
-          var message = WebSocketMessage.fromJsonString(event);
+          var message = WebSocketMessage.fromJsonString(
+            event,
+            server.serializationManager,
+          );
           if (message is OpenMethodStreamResponse) {
             streamOpened.complete();
           } else if (message is MethodStreamSerializableException) {
@@ -275,7 +292,8 @@ void main() {
             connectionId);
       });
 
-      test('then CloseMethodStreamCommand matching the endpoint is received.',
+      test(
+          'then CloseMethodStreamCommand matching the endpoint with error reason is received.',
           () async {
         var message =
             closeMethodStreamCommand.future.timeout(Duration(seconds: 5));
