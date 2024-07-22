@@ -91,7 +91,7 @@ class GoogleCloudStorage extends CloudStorage {
   }) async {
     var response = await _s3Client.headObject(path);
     if (response.statusCode != 200) {
-      print('File does not exist: $path -- status code ${response.statusCode}');
+      throw 'File does not exist: $path -- status code ${response.statusCode}';
     }
     return response.statusCode == 200;
   }
