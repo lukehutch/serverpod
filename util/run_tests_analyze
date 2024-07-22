@@ -55,8 +55,7 @@ declare -a projectPaths=(
 
     "integrations/serverpod_cloud_storage_s3"
     "integrations/serverpod_cloud_storage_gcp"
-    "integrations/serverpod_cloud_storage_gcp_native"
-
+    
     "tools/serverpod_cli"
 )
 
