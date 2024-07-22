@@ -90,9 +90,6 @@ class GoogleCloudStorage extends CloudStorage {
     required String path,
   }) async {
     var response = await _s3Client.headObject(path);
-    if (response.statusCode != 200) {
-      throw 'File does not exist: $path -- status code ${response.statusCode}';
-    }
     return response.statusCode == 200;
   }
 
@@ -101,10 +98,7 @@ class GoogleCloudStorage extends CloudStorage {
     required Session session,
     required String path,
   }) async {
-    var response = await _s3Client.deleteObject(path);
-    if (response.statusCode != 200) {
-      throw 'File does not exist: $path -- status code ${response.statusCode}';
-    }
+    await _s3Client.deleteObject(path);
   }
 
   @override
