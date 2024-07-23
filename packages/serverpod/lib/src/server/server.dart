@@ -381,7 +381,7 @@ class Server {
       serverpod.logVerbose('Failed to upgrade connection to websocket');
       return;
     }
-    webSocket.pingInterval = const Duration(seconds: 25);
+    webSocket.pingInterval = const Duration(seconds: 30);
     var websocketKey = const Uuid().v4();
     _webSockets[websocketKey] = (
       requestHandler(
