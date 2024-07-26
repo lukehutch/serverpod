@@ -31,14 +31,20 @@ class RouteStaticDirectory extends Route {
   /// be cached.
   late final RegExp? noCachePathRegexp;
 
+  /// The path to serve as the root path ('/'), e.g. '/index.html'.
+  final String? serveAsRootPath;
+
   /// Creates a static directory with the [serverDirectory] as its root.
   /// If [basePath] is provided, the directory will be served from that path.
   /// If [noCachePathPattern] is provided, paths matching the provided pattern
   /// will not be cached. (Otherwise, all paths will be cached for a year.)
+  /// If [serveAsRootPath] is provided, the path will be served at the root
+  /// path ('/').
   RouteStaticDirectory({
     required this.serverDirectory,
     this.basePath,
     String? noCachePathPattern,
+    this.serveAsRootPath,
   }) {
     // Pre-compile the regexp pattern, if provided
     final regexpPath = noCachePathPattern;
@@ -50,6 +56,10 @@ class RouteStaticDirectory extends Route {
     session as MethodCallSession;
 
     var path = Uri.decodeFull(session.uri.path);
+
+    if (serveAsRootPath != null && path == '/') {
+      path = serveAsRootPath!;
+    }
 
     try {
       // Remove version control string
