@@ -47,7 +47,7 @@ class RouteStaticDirectory extends Route {
     this.serveAsRootPath,
   }) {
     // Pre-compile the regexp pattern, if provided
-    final regexpPath = noCachePathPattern;
+    var regexpPath = noCachePathPattern;
     noCachePathRegexp = regexpPath == null ? null : RegExp(regexpPath);
   }
 
