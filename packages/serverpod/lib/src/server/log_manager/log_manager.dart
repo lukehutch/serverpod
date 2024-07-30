@@ -112,11 +112,12 @@ class SessionLogManager {
       order: _nextLogOrderId,
     );
 
-    //if (session.serverpod.runMode == ServerpodRunMode.development) {
-    stdout.writeln('${entry.logLevel.name.toUpperCase()}: ${entry.message}');
-    if (entry.error != null) stdout.writeln(entry.error);
-    if (entry.stackTrace != null) stdout.writeln(entry.stackTrace);
-    //}
+    if (session.serverpod.runMode == ServerpodRunMode.development ||
+        level != LogLevel.debug) {
+      stdout.writeln('${entry.logLevel.name.toUpperCase()}: ${entry.message}');
+      if (entry.error != null) stdout.writeln(entry.error);
+      if (entry.stackTrace != null) stdout.writeln(entry.stackTrace);
+    }
 
     if (!_shouldLogEntry(session: session, entry: entry)) {
       return;
